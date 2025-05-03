@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russiske verb - Øv på bøyninger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #verb {
+            font-size: 24px;
+            margin: 20px;
+            font-weight: bold;
+        }
+        .tile-container {
+            display: flex;
+            flex-direction: column; /* Stack the elements vertically */
+            align-items: center;    /* Center them horizontally */
+            margin-top: 20px;
+            flex: 1;
+        }
+        .tile-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;  /* Allow wrapping for small screens */
+            gap: 10px; /* Add some space between tiles */
+            align-items: center;
+        }
+        .tile {
+            display: inline-block;
+            width: 110px;  /* Default width for mobile */
+            height: 70px;  /* Adjust the height to fit better */
+            margin: 5px;
+            background-color: lightgray;
+            border-radius: 5px;
+            line-height: 70px;
+            font-size: 16px;
+            cursor: pointer;
+            user-select: none;
+            opacity: 0; /* Start with hidden tiles */
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+            color: transparent; /* Make text invisible initially */
+        }
+        .tile.revealed {
+            opacity: 1; /* Make it visible */
+            color: white; /* Text color when revealed */
+            background-color: #4CAF50; /* Green background when revealed */
+        }
+        #next-btn, #reveal-all-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 80%; /* Make buttons wide on mobile */
+            max-width: 200px; /* Set max width to avoid too large buttons */
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        #reveal-all-btn {
+            background-color: #f44336;
+        }
+
+        /* Media query for larger screens */
+        @media (min-width: 600px) {
+            .tile {
+                width: 100px;  /* Increase tile size on larger screens */
+                height: 100px;
+                font-size: 18px;
+            }
+            #next-btn, #reveal-all-btn {
+                width: 200px; /* Wider buttons on larger screens */
+            }
+        }
+
+        /* Styling for smaller screens (iPhone, etc.) */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px; /* Reduce heading size for small screens */
+            }
+            #verb {
+                font-size: 20px; /* Smaller verb text */
+            }
+
+            /* Decrease tile size for mobile */
+            .tile {
+                width: 80px;  /* Smaller tile width */
+                height: 60px; /* Smaller tile height */
+                font-size: 14px; /* Smaller text */
+                line-height: 60px; /* Center text vertically */
+            }
+
+            /* Adjust buttons for smaller screens */
+            #next-btn, #reveal-all-btn {
+                width: 90%; /* Button width smaller for mobile */
+                font-size: 14px; /* Smaller button text */
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Øv på Russiske Verb</h1>
+    
+    <div id="verb">Last ned verbene...</div>
+
+    <div class="tile-container">
+        <!-- Translation tile -->
+        <div id="translation-tile" class="tile"></div>
+        <!-- Presens tiles -->
+        <div class="tile-row" id="presens-tiles"></div>
+        <!-- Preteritum tiles -->
+        <div class="tile-row" id="preteritum-tiles"></div>
+    </div>
+
+    <div style="display: flex; justify-content: center; width: 100%;">
+        <button id="next-btn">Neste verb</button>
+    </div>
+    <div style="display: flex; justify-content: center; width: 100%;">
+        <button id="reveal-all-btn">Vis alle</button>
+    </div>
+
+    <script id="verbs-data" type="application/json">
+    [
+        {
+            "Russisk verb": "идти",
+            "Norsk oversettelse": "å gå (bestemt)",
+            "Presens 1. pers. entall": "иду",
+            "Presens 2. pers. entall": "идёшь",
+            "Presens 3. pers. entall": "идёт",
+            "Presens 1. pers. flertall": "идём",
+            "Presens 2. pers. flertall": "идёте",
+            "Presens 3. pers. flertall": "идут",
+            "Preteritum mask.": "шёл",
+            "Preteritum fem.": "шла",
+            "Preteritum nøytr.": "шло",
+            "Preteritum flertall": "шли"
+        },
+        {
+            "Russisk verb": "ходить",
+            "Norsk oversettelse": "å gå (ubestemt)",
+            "Presens 1. pers. entall": "хожу",
+            "Presens 2. pers. entall": "ходишь",
+            "Presens 3. pers. entall": "ходит",
+            "Presens 1. pers. flertall": "ходим",
+            "Presens 2. pers. flertall": "ходите",
+            "Presens 3. pers. flertall": "ходят",
+            "Preteritum mask.": "ходил",
+            "Preteritum fem.": "ходила",
+            "Preteritum nøytr.": "ходило",
+            "Preteritum flertall": "ходили"
+        },
+        {
+            "Russisk verb": "продавать",
+            "Norsk oversettelse": "å selge",
+            "Presens 1. pers. entall": "продаю",
+            "Presens 2. pers. entall": "продаёшь",
+            "Presens 3. pers. entall": "продаёт",
+            "Presens 1. pers. flertall": "продаём",
+            "Presens 2. pers. flertall": "продаёте",
+            "Presens 3. pers. flertall": "продают",
+            "Preteritum mask.": "продавал",
+            "Preteritum fem.": "продавала",
+            "Preteritum nøytr.": "продавало",
+            "Preteritum flertall": "продавали"
+        }
+    ]
+    </script>
+
+    <script>
+        const rawData = document.getElementById('verbs-data').textContent;
+        const verbs = JSON.parse(rawData);
+
+        let currentVerbIndex = 0;
+        let currentVerb;
+
+        const translationTile = document.getElementById('translation-tile');
+        const presensTilesContainer = document.getElementById('presens-tiles');
+        const preteritumTilesContainer = document.getElementById('preteritum-tiles');
+        const verbElement = document.getElementById('verb');
+        const nextBtn = document.getElementById('next-btn');
+        const revealAllBtn = document.getElementById('reveal-all-btn');
+
+        // Randomize the verb index upon page load
+        function getRandomVerbIndex() {
+            return Math.floor(Math.random() * verbs.length);
+        }
+
+        function renderVerb(verb) {
+            // Show the Russian verb
+            verbElement.textContent = verb['Russisk verb'];
+
+            // Render translation tile and update it for each verb
+            renderTranslationTile(verb['Norsk oversettelse']);
+
+            // Clear previous tiles
+            presensTilesContainer.innerHTML = '';
+            preteritumTilesContainer.innerHTML = '';
+
+            // Show presens tiles
+            for (const [key, value] of Object.entries(verb)) {
+                if (key.startsWith('Presens')) {
+                    const tile = createTile(value);
+                    presensTilesContainer.appendChild(tile);
+                }
+            }
+
+            // Show preteritum tiles
+            for (const [key, value] of Object.entries(verb)) {
+                if (key.startsWith('Preteritum')) {
+                    const tile = createTile(value);
+                    preteritumTilesContainer.appendChild(tile);
+                }
+            }
+        }
+
+        // Function to create a tile
+        function createTile(value) {
+            const tile = document.createElement('div');
+            tile.classList.add('tile'); // Start with hidden tile
+            tile.textContent = value;
+
+            // Delay visibility on click for the flip effect
+            setTimeout(() => {
+                tile.style.opacity = 1; // Show tile after a small delay
+            }, 100);
+
+            tile.addEventListener('click', function () {
+                tile.classList.toggle('revealed'); // Toggle between revealed and hidden
+            });
+
+            return tile;
+        }
+
+        // Function to render translation tile
+        function renderTranslationTile(translation) {
+            translationTile.textContent = translation;
+            translationTile.classList.remove('revealed'); // Ensure it's hidden initially
+
+            // Reset translation tile opacity and event listener
+            translationTile.style.opacity = 0; // Start with hidden state
+            setTimeout(() => {
+                translationTile.style.opacity = 1; // Make translation tile visible
+            }, 100);
+
+            // Remove any previous event listeners to prevent duplication
+            translationTile.removeEventListener('click', flipTranslation);
+            
+            // Add click event listener to flip the translation tile
+            translationTile.addEventListener('click', flipTranslation);
+        }
+
+        // Function to handle flipping the translation tile
+        function flipTranslation() {
+            translationTile.classList.toggle('revealed');
+        }
+
+        // Get next verb
+        function nextVerb() {
+            currentVerbIndex = getRandomVerbIndex();
+            currentVerb = verbs[currentVerbIndex];
+            renderVerb(currentVerb);
+        }
+
+        // Show all tiles
+        function revealAll() {
+            const allTiles = document.querySelectorAll('.tile');
+            allTiles.forEach(tile => {
+                tile.classList.add('revealed'); // Show all tiles
+            });
+        }
+
+        // Start with a random verb on page load
+        currentVerbIndex = getRandomVerbIndex();
+        currentVerb = verbs[currentVerbIndex];
+        renderVerb(currentVerb);
+
+        // Event listeners for the buttons
+        nextBtn.addEventListener('click', nextVerb);
+        revealAllBtn.addEventListener('click', revealAll);
+    </script>
+</body>
+</html>
