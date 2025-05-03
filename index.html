@@ -5,16 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Øv på russiske verb</title>
   <style>
+    :root {
+      --bg: #fff;
+      --text: #000;
+      --tile-bg: lightgray;
+      --tile-reveal-bg: #4CAF50;
+      --tile-reveal-text: white;
+      --btn-next: #4CAF50;
+      --btn-reveal: #f44336;
+      --btn-dark: #333;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --text: #f0f0f0;
+      --tile-bg: #333;
+      --tile-reveal-bg: #009688;
+      --tile-reveal-text: white;
+      --btn-next: #009688;
+      --btn-reveal: #c62828;
+      --btn-dark: #666;
+    }
+
     body {
+      background-color: var(--bg);
+      color: var(--text);
       font-family: Arial, sans-serif;
       padding: 10px;
       margin: 0;
       text-align: center;
+      transition: background 0.3s, color 0.3s;
     }
 
     h1 {
       font-size: 28px;
-      color: #333;
       margin-top: 0;
       margin-bottom: 10px;
     }
@@ -39,28 +63,28 @@
     }
 
     .tile {
-      background-color: lightgray;
+      background-color: var(--tile-bg);
       border-radius: 5px;
       padding: 10px;
       font-size: 16px;
       cursor: pointer;
       user-select: none;
       opacity: 0;
-      transition: opacity 0.3s ease, background-color 0.3s ease;
       color: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 50px;
-      flex: 1 1 calc(50% - 20px); /* 2 per row on mobile */
+      flex: 1 1 calc(50% - 20px);
       max-width: 200px;
       box-sizing: border-box;
+      transition: all 0.3s ease;
     }
 
     .tile.revealed {
       opacity: 1;
-      color: white;
-      background-color: #4CAF50;
+      color: var(--tile-reveal-text);
+      background-color: var(--tile-reveal-bg);
     }
 
     .button-container {
@@ -80,19 +104,16 @@
       border: none;
       color: white;
       border-radius: 5px;
+      transition: background 0.3s;
     }
 
-    #next-btn {
-      background-color: #4CAF50;
-    }
-
-    #reveal-all-btn {
-      background-color: #f44336;
-    }
+    #next-btn { background-color: var(--btn-next); }
+    #reveal-all-btn { background-color: var(--btn-reveal); }
+    #toggle-theme { background-color: var(--btn-dark); }
 
     @media (min-width: 600px) {
       .tile {
-        flex: 1 1 calc(33.33% - 20px); /* 3 per row on wider screens */
+        flex: 1 1 calc(33.33% - 20px);
       }
     }
   </style>
@@ -113,6 +134,7 @@
   <div class="button-container">
     <button id="reveal-all-btn">Vis alle</button>
     <button id="next-btn">Neste verb</button>
+    <button id="toggle-theme">Mørkt tema</button>
   </div>
 
   <script id="verbs-data" type="application/json">
@@ -2748,15 +2770,14 @@
     const preteritumTiles = document.getElementById("preteritum-tiles");
     const nextBtn = document.getElementById("next-btn");
     const revealAllBtn = document.getElementById("reveal-all-btn");
+    const toggleThemeBtn = document.getElementById("toggle-theme");
 
     function createTile(text) {
       const tile = document.createElement("div");
       tile.className = "tile";
       tile.textContent = text;
-
       setTimeout(() => (tile.style.opacity = 1), 100);
       tile.addEventListener("click", () => tile.classList.toggle("revealed"));
-
       return tile;
     }
 
@@ -2784,9 +2805,14 @@
       document.querySelectorAll(".tile").forEach(tile => tile.classList.add("revealed"));
     }
 
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+
     renderVerb(verbs[currentIndex]);
     nextBtn.addEventListener("click", nextVerb);
     revealAllBtn.addEventListener("click", revealAll);
+    toggleThemeBtn.addEventListener("click", toggleTheme);
   </script>
 </body>
 </html>
