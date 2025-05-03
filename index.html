@@ -1,112 +1,141 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Russiske verb - Øv på bøyninger</title>
-    <style>
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #000000;
-            --tile-bg: lightgray;
-            --tile-revealed-bg: #4CAF50;
-            --btn-bg: #4CAF50;
-            --btn-danger-bg: #f44336;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Øv på russiske verb</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --text: #000;
+      --tile-bg: lightgray;
+      --tile-reveal-bg: #4CAF50;
+      --tile-reveal-text: white;
+      --btn-next: #4CAF50;
+      --btn-reveal: #f44336;
+      --btn-dark: #333;
+    }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #121212;
-                --text-color: #ffffff;
-                --tile-bg: #333;
-                --tile-revealed-bg: #2e7d32;
-                --btn-bg: #2e7d32;
-                --btn-danger-bg: #c62828;
-            }
-        }
+    body.dark {
+      --bg: #121212;
+      --text: #f0f0f0;
+      --tile-bg: #333;
+      --tile-reveal-bg: #009688;
+      --tile-reveal-text: white;
+      --btn-next: #009688;
+      --btn-reveal: #c62828;
+      --btn-dark: #666;
+    }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 10px;
-        }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      margin: 0;
+      text-align: center;
+      transition: background 0.3s, color 0.3s;
+    }
 
-        h1 {
-            font-size: 28px;
-            color: var(--text-color);
-        }
+    h1 {
+      font-size: 28px;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
 
-        .tile-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-        }
+    #verb {
+      font-size: 24px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
 
-        .tile {
-            display: inline-block;
-            width: 100px;
-            height: 100px;
-            margin: 10px;
-            background-color: var(--tile-bg);
-            border-radius: 5px;
-            line-height: 100px;
-            font-size: 18px;
-            cursor: pointer;
-            user-select: none;
-            opacity: 0; /* Start with hidden tiles */
-            transition: opacity 0.3s ease, background-color 0.3s ease;
-            color: transparent; /* Make text invisible initially */
-        }
+    .section-title {
+      margin: 10px 0 5px;
+      font-weight: bold;
+      font-size: 20px;
+    }
 
-        .tile.revealed {
-            opacity: 1;
-            color: white;
-            background-color: var(--tile-revealed-bg); 
-        }
+    .tiles-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
 
-        #next-btn, #reveal-all-btn {
-            background-color: var(--btn-bg);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+    .tile {
+      background-color: var(--tile-bg);
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      user-select: none;
+      opacity: 0;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      flex: 1 1 calc(50% - 20px);
+      max-width: 200px;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
 
-        #reveal-all-btn {
-            background-color: var(--btn-danger-bg);
-        }
+    .tile.revealed {
+      opacity: 1;
+      color: var(--tile-reveal-text);
+      background-color: var(--tile-reveal-bg);
+    }
 
-        /* Center the buttons */
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
 
-    </style>
+    .button-container button {
+      flex: 1 1 45%;
+      max-width: 200px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    #next-btn { background-color: var(--btn-next); }
+    #reveal-all-btn { background-color: var(--btn-reveal); }
+    #toggle-theme { background-color: var(--btn-dark); }
+
+    @media (min-width: 600px) {
+      .tile {
+        flex: 1 1 calc(33.33% - 20px);
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Øv på Russiske Verb</h1>
-    
-    <div id="verb">Last ned verbene...</div>
+  <h1>Øv på russiske verb</h1>
+  <div id="verb">Laster...</div>
 
-    <div class="tile-container">
-        <div id="translation-tile" class="tile"></div> <!-- Translation tile -->
-        <div id="presens-tiles" class="tiles"></div>
-        <div id="preteritum-tiles" class="tiles"></div>
-    </div>
+  <div class="section-title">Oversettelse</div>
+  <div class="tiles-section" id="translation-container"></div>
 
-    <div class="button-container">
-        <button id="next-btn">Neste verb</button>
-        <button id="reveal-all-btn">Vis alle</button>
-    </div>
+  <div class="section-title">Presens</div>
+  <div class="tiles-section" id="presens-tiles"></div>
 
+  <div class="section-title">Preteritum</div>
+  <div class="tiles-section" id="preteritum-tiles"></div>
+
+  <div class="button-container">
+    <button id="reveal-all-btn">Vis alle</button>
+    <button id="next-btn">Neste verb</button>
+    <button id="toggle-theme">Mørkt tema</button>
+  </div>
   <script id="verbs-data" type="application/json">
   [
  {
@@ -2730,93 +2759,64 @@
 ]
   </script>
 
-   <script>
-        const rawData = document.getElementById('verbs-data').textContent;
-        const verbs = JSON.parse(rawData);
+ <script>
+    const verbs = JSON.parse(document.getElementById("verbs-data").textContent);
+    let currentIndex = Math.floor(Math.random() * verbs.length);
 
-        let currentVerbIndex = 0;
-        let currentVerb;
+    const verbDisplay = document.getElementById("verb");
+    const translationContainer = document.getElementById("translation-container");
+    const presensTiles = document.getElementById("presens-tiles");
+    const preteritumTiles = document.getElementById("preteritum-tiles");
+    const nextBtn = document.getElementById("next-btn");
+    const revealAllBtn = document.getElementById("reveal-all-btn");
+    const toggleThemeBtn = document.getElementById("toggle-theme");
 
-        const translationTile = document.getElementById('translation-tile');
-        const presensTilesContainer = document.getElementById('presens-tiles');
-        const preteritumTilesContainer = document.getElementById('preteritum-tiles');
-        const verbElement = document.getElementById('verb');
-        const nextBtn = document.getElementById('next-btn');
-        const revealAllBtn = document.getElementById('reveal-all-btn');
+    function createTile(text) {
+      const tile = document.createElement("div");
+      tile.className = "tile";
+      tile.textContent = text;
+      setTimeout(() => (tile.style.opacity = 1), 100);
+      tile.addEventListener("click", () => tile.classList.toggle("revealed"));
+      return tile;
+    }
 
-        function renderVerb(verb) {
-            verbElement.textContent = verb['Russisk verb'];
+    function renderVerb(verb) {
+      verbDisplay.textContent = verb["Russisk verb"];
+      translationContainer.innerHTML = "";
+      presensTiles.innerHTML = "";
+      preteritumTiles.innerHTML = "";
 
-            renderTranslationTile(verb['Norsk oversettelse']);
+      const translationTile = createTile(verb["Norsk oversettelse"]);
+      translationContainer.appendChild(translationTile);
 
-            presensTilesContainer.innerHTML = '';
-            preteritumTilesContainer.innerHTML = '';
+      for (const [key, value] of Object.entries(verb)) {
+        if (key.startsWith("Presens")) presensTiles.appendChild(createTile(value));
+        if (key.startsWith("Preteritum")) preteritumTiles.appendChild(createTile(value));
+      }
+    }
 
-            for (const [key, value] of Object.entries(verb)) {
-                if (key.startsWith('Presens')) {
-                    const tile = createTile(value);
-                    presensTilesContainer.appendChild(tile);
-                }
-            }
+    function nextVerb() {
+      currentIndex = (currentIndex + 1) % verbs.length;
+      renderVerb(verbs[currentIndex]);
+    }
 
-            for (const [key, value] of Object.entries(verb)) {
-                if (key.startsWith('Preteritum')) {
-                    const tile = createTile(value);
-                    preteritumTilesContainer.appendChild(tile);
-                }
-            }
-        }
+    function revealAll() {
+      document.querySelectorAll(".tile").forEach(tile => tile.classList.add("revealed"));
+    }
 
-        function createTile(value) {
-            const tile = document.createElement('div');
-            tile.classList.add('tile');
-            tile.textContent = value;
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
 
-            setTimeout(() => {
-                tile.style.opacity = 1;
-            }, 100);
+    // Auto-detect theme based on user's system preferences
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.classList.add("dark");
+    }
 
-            tile.addEventListener('click', function () {
-                tile.classList.toggle('revealed');
-            });
-
-            return tile;
-        }
-
-        function renderTranslationTile(translation) {
-            translationTile.textContent = translation;
-            translationTile.classList.remove('revealed');
-            translationTile.style.opacity = 0;
-
-            setTimeout(() => {
-                translationTile.style.opacity = 1;
-            }, 100);
-
-            translationTile.removeEventListener('click', flipTranslation);
-            translationTile.addEventListener('click', flipTranslation);
-        }
-
-        function flipTranslation() {
-            translationTile.classList.toggle('revealed');
-        }
-
-        function nextVerb() {
-            currentVerbIndex = (currentVerbIndex + 1) % verbs.length;
-            currentVerb = verbs[currentVerbIndex];
-            renderVerb(currentVerb);
-        }
-
-        function revealAll() {
-            const allTiles = document.querySelectorAll('.tile');
-            allTiles.forEach(tile => {
-                tile.classList.add('revealed');
-            });
-        }
-
-        nextVerb();
-
-        nextBtn.addEventListener('click', nextVerb);
-        revealAllBtn.addEventListener('click', revealAll);
-    </script>
+    renderVerb(verbs[currentIndex]);
+    nextBtn.addEventListener("click", nextVerb);
+    revealAllBtn.addEventListener("click", revealAll);
+    toggleThemeBtn.addEventListener("click", toggleTheme);
+  </script>
 </body>
 </html>
