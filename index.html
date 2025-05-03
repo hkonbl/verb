@@ -2796,9 +2796,9 @@
     }
 
     function nextVerb() {
-      currentIndex = (currentIndex + 1) % verbs.length;
-      renderVerb(verbs[currentIndex]);
-    }
+      currentIndex = Math.floor(Math.random() * verbs.length);  // Velg et tilfeldig verb
+      renderVerb(verbs[currentIndex]);  // Render verbet med den tilfeldige indeksen
+}
 
     function revealAll() {
       document.querySelectorAll(".tile").forEach(tile => tile.classList.add("revealed"));
