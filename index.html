@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Øv på russiske verb</title>
+  <link rel="manifest" href="/verb/manifest.json" />
+  <link rel="icon" href="/verb/icon-192.png" type="image/png">
+  <meta name="theme-color" content="#4CAF50">
+
   <style>
     :root {
       --bg: #fff;
@@ -2817,6 +2821,15 @@
     nextBtn.addEventListener("click", nextVerb);
     revealAllBtn.addEventListener("click", revealAll);
     toggleThemeBtn.addEventListener("click", toggleTheme);
+
+   if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/verb/service-worker.js')
+        .then(reg => console.log("Service Worker registrert:", reg.scope))
+        .catch(err => console.log("Service Worker-feil:", err));
+  });
+}
+
   </script>
 </body>
 </html>
